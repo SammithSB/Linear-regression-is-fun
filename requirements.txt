@@ -69,7 +69,7 @@ netcat==0.0.1a0
 nodeenv==1.5.0
 numpy==1.19.4
 orjson==3.4.6
-pandas==1.2.0
+pandas==1.1.5
 parsel==1.6.0
 parso==0.8.2
 path-and-address==2.0.1
