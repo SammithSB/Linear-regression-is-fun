@@ -1,0 +1,57 @@
+{% extends 'base.html'%} {% block head %}
+<title>Find the line of best fit</title>
+{% endblock %} {% block body%} <br />
+<p style="color:red">
+  You have made a terrible mistake and it shall not be forgiven!! Unless of
+  course you correct your mistake. Life is all about making most out of what you
+  have, so please make sure that you have typed in the x and y values and there
+  are as many x values as the y values.
+</p>
+<hr />
+As STEM students we have gone through many different formulas which are supposed
+to have linear relation, of the top of my head, best example is Ohm's law, it
+states that Voltage and Current have a linear relation with each other but when
+we conduct the experiment we don't really observe a perfectly linear
+relationship, the values attained are somewhat linear and reason is because
+while conducting experiment there is variation in heat which causes a variation
+of resistance too. In these situations, we were taught to just connect the first
+point and last point and finish up the experiment but it does not give the most
+accurate equation of line, to get the most accurate line, we need to use a
+statistical method called linear regression, the line obtained from this is
+called the line of best fit.
+<br />
+Let us call the x values as independent variable and y the dependent variable.
+<br />
+It is assumed that the two variables are linearly related, so our task is find
+the function that predicts y values as accurately as possible. That is what this
+calculator does.
+<br />
+As the task is to find the line that best fits, we use principle of least
+squares to find that.
+<br />
+<hr />
+<form action="/calc" method="POST">
+  <input
+    class="form-control"
+    type="text"
+    name="x_values"
+    id="x_values"
+    value="{{xvalue}}"
+    placeholder="x-values separated by comma"
+    aria-label="x-values separated by comma"
+  />
+  <br />
+  <input
+    class="form-control"
+    type="text"
+    name="y_values"
+    id="y_values"
+    value="{{yvalue}}"
+    placeholder="y-values separated by comma"
+    aria-label="y-values separated by comma"
+  />
+  <br />
+  <input type="submit" value="Estimate" />
+</form>
+<hr />
+{%endblock%}

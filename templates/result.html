@@ -1,0 +1,142 @@
+{% extends 'base.html' %} {% block head %}
+<title>Result</title>
+{% endblock %} {% block body %}
+<br />
+<h5>
+  Line of best fit is {%if
+  new[1]>=0%}y={{new[0]}}x+{{new[1]}}{%else%}y={{new[0]}}x{{new[1]}}{%endif%}
+</h5>
+<canvas id="mychart" width="600" height="300"></canvas>
+Calculation Summary
+<br />
+Sum of values of x is:
+<span id="sumx"></span>
+<br />
+Sum of values of y is:
+<span id="sumy"></span>
+<br />
+Mean of values of x (Mx) is:
+<span id="meanx"></span>
+<br />
+Mean of values of y (My) is:
+<span id="meany"></span>
+<br />
+Sum of squares (SS) is:
+<span id="sumsquare"></span>
+<br />
+Sum of product (SP) is:
+<span id="sumproduct"></span>
+<br />
+General regression equation is: y=bX+a
+<br />
+b = (SP)/(SS) = <span id="sumproduct1"></span>/<span id="sumsquare1"></span> =
+<span id="b"></span>
+<br />
+a = (My) - b(Mx) =
+<span id="meanx1"></span>-(<span id="b1"></span> x
+<span id="meany1"></span>)=<span id="a"></span>
+<br />
+{%if
+new[1]>=0%}y={{new[0]}}x+{{new[1]}}{%else%}y={{new[0]}}x{{new[1]}}{%endif%}{%
+block javascript %}
+<script>
+  const dict = [];
+  const dict2 = [];
+  const dict3 = [];
+  const xvalue = JSON.parse("{{x | tojson}}");
+  const yvalue = JSON.parse("{{y | tojson}}");
+  const line = JSON.parse("{{new | tojson}}");
+  console.log(line[2]);
+  console.log(line[3]);
+  var sumsquare = line[3];
+  document.getElementById("sumsquare").innerHTML = sumsquare;
+  document.getElementById("sumsquare1").innerHTML = sumsquare;
+  var sumproduct = line[2];
+  document.getElementById("sumproduct").innerHTML = sumproduct;
+  document.getElementById("sumproduct1").innerHTML = sumproduct;
+  document.getElementById("b").innerHTML = sumproduct / sumsquare;
+  document.getElementById("b1").innerHTML = sumproduct / sumsquare;
+
+  var sumx = xvalue.reduce(function(a, b) {
+    return a + b;
+  }, 0);
+  document.getElementById("sumx").innerHTML = sumx;
+  var sumy = yvalue.reduce(function(a, b) {
+    return a + b;
+  }, 0);
+  document.getElementById("sumy").innerHTML = sumy;
+  var meanx = xvalue.reduce(function(a, b) {
+    len = xvalue.length;
+    return sumx / len;
+  }, 0);
+  document.getElementById("meanx").innerHTML = meanx;
+  document.getElementById("meanx1").innerHTML = meanx;
+  var meany = yvalue.reduce(function(a, b) {
+    len = yvalue.length;
+    return sumy / len;
+  }, 0);
+  document.getElementById("meany").innerHTML = meany;
+  document.getElementById("meany1").innerHTML = meany;
+  const a = meany - meanx * (sumproduct / sumsquare);
+  document.getElementById("a").innerHTML = a;
+  var x = xvalue[0] + yvalue[1] * xvalue[2];
+  const ctx1 = document.getElementById("mychart").getContext("2d");
+  async function getdata() {
+    var i = 0;
+    while (i < xvalue.length) {
+      dict.push({ x: xvalue[i], y: yvalue[i] });
+      i++;
+    }
+    x = xvalue.length;
+    y = yvalue.length;
+  }
+  async function getline() {
+    var i = 0;
+    dict2.push({ x: line[0], y: line[1] });
+  }
+  async function mixchartit() {
+    await getdata();
+    await getline();
+    console.log(dict);
+    console.log(dict2);
+    y0 = Math.min.apply(Math, xvalue) * dict2[0].x + dict2[0].y;
+    x0 = Math.min.apply(Math, xvalue);
+    console.log();
+    x = xvalue.length - 1;
+    console.log(x);
+    y1 = Math.max.apply(Math, xvalue) * dict2[0].x + dict2[0].y;
+    x1 = Math.max.apply(Math, xvalue);
+    console.log(x1);
+    dict3.push({ x: x0, y: y0 }, { x: x1, y: y1 });
+    console.log(dict3);
+    console.log(xvalue[x]);
+    console.log(dict[0].x);
+    console.log(dict2[0].y);
+    var mixedChart = new Chart(ctx1, {
+      type: "scatter",
+      data: {
+        datasets: [
+          {
+            label: "Given dataset",
+            data: dict,
+            pointBackgroundColor: "rgba(65,105,225,1)",
+            borderColor: "rgb(65, 105, 225,1)"
+          },
+          {
+            label: "Line of best fit",
+            data: dict3,
+            showLine: true,
+            fill: false,
+            pointBackgroundColor: "rgba(255,99,132,0.5)",
+            borderColor: "rgb(255, 99, 132)",
+            // Changes this dataset to become a line
+            type: "line"
+          }
+        ]
+      }
+    });
+  }
+
+  mixchartit();
+</script>
+{% endblock %}{% endblock %}
