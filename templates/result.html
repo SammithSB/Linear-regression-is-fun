@@ -39,6 +39,7 @@ a = (My) - b(Mx) =
 {%if
 new[1]>=0%}y={{new[0]}}x+{{new[1]}}{%else%}y={{new[0]}}x{{new[1]}}{%endif%}{%
 block javascript %}
+<hr>
 <script>
   const dict = [];
   const dict2 = [];
@@ -57,21 +58,21 @@ block javascript %}
   document.getElementById("b").innerHTML = sumproduct / sumsquare;
   document.getElementById("b1").innerHTML = sumproduct / sumsquare;
 
-  var sumx = xvalue.reduce(function(a, b) {
+  var sumx = xvalue.reduce(function (a, b) {
     return a + b;
   }, 0);
   document.getElementById("sumx").innerHTML = sumx;
-  var sumy = yvalue.reduce(function(a, b) {
+  var sumy = yvalue.reduce(function (a, b) {
     return a + b;
   }, 0);
   document.getElementById("sumy").innerHTML = sumy;
-  var meanx = xvalue.reduce(function(a, b) {
+  var meanx = xvalue.reduce(function (a, b) {
     len = xvalue.length;
     return sumx / len;
   }, 0);
   document.getElementById("meanx").innerHTML = meanx;
   document.getElementById("meanx1").innerHTML = meanx;
-  var meany = yvalue.reduce(function(a, b) {
+  var meany = yvalue.reduce(function (a, b) {
     len = yvalue.length;
     return sumy / len;
   }, 0);
